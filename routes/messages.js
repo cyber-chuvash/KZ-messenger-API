@@ -1,6 +1,10 @@
 const express = require('express');
 const Redis = require('ioredis');
 
+const { SuccessResponse } = require('../responses/success');
+const { ErrorResponse } = require('../responses/error');
+
+
 const router = express.Router();
 
 const redis = new Redis({
@@ -15,8 +19,8 @@ const redis = new Redis({
     POST a message
 
 Request model (urlencoded):
-    message: str
-    recepient_id: str(uuid)
+    text: str
+    recipient_id: str(uuid)
 
 
 Response model:
@@ -26,13 +30,22 @@ Response model:
 */
 
 router.post('/', function(req, res, next) {
-    const {message, recipient_id: recipientId} = req.body;
+    const {text, recipient_id: recipientId} = req.body;
+    const senderId = req.auth.userId;
 
-    // TODO check params
+    if ( !text || !recipientId ) {
+        res.status(400).send(new ErrorResponse(400, 'text and recipient_id fields must be present'));
+        return;
+    }
 
-    redis.publish(recipientId, message);
+    const message = {
+        sender_id: senderId,
+        text: text
+    };
 
-    res.status(200).send({response: 0})
+    redis.publish(recipientId, JSON.stringify({ message }));
+
+    res.status(200).send(new SuccessResponse(0));
 });
 
 module.exports = router;
