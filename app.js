@@ -30,3 +30,7 @@ app.use(/^\/(?!auth).*$/, auth());     // use for any path except /auth
 app.use('/messages', messagesRouter);
 
 module.exports = app;
+
+if (require.main === module) {
+    app.listen(80, () => { console.log('Listening on port 80') });
+}
