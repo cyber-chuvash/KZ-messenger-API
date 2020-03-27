@@ -1,7 +1,6 @@
 {
   "corsConfig": {
-    "origin": "https://gladbot.ru",
-    "cookie_domain": "gladbot.ru"
+    "origin": "https://kzm.chuvash.pw"
   },
   "redisConfig": {
     "host": "redis",

@@ -1,7 +1,6 @@
 {
   "corsConfig": {
-    "origin": "http://localhost:3000",
-    "cookie_domain": "localhost"
+    "origin": "http://localhost:3000"
   },
   "redisConfig": {
     "host": "localhost",
