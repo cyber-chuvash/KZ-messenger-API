@@ -1,0 +1,10 @@
+{
+  "corsConfig": {
+    "origin": "https://gladbot.ru",
+    "cookie_domain": "gladbot.ru"
+  },
+  "redisConfig": {
+    "host": "redis",
+    "port": 6379
+  }
+}

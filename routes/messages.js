@@ -1,5 +1,8 @@
 const express = require('express');
 const Redis = require('ioredis');
+const config = require('config');
+
+const redisConfig = config.get('redisConfig');
 
 const { SuccessResponse } = require('../responses/success');
 const { ErrorResponse } = require('../responses/error');
@@ -7,13 +10,7 @@ const { ErrorResponse } = require('../responses/error');
 
 const router = express.Router();
 
-const redis = new Redis({
-    port: 6379, // Redis port
-    host: "127.0.0.1", // Redis host
-    // family: 4, // 4 (IPv4) or 6 (IPv6)
-    // password: "auth",
-    // db: 0
-});
+const redis = new Redis(redisConfig);
 
 /*
     POST a message
