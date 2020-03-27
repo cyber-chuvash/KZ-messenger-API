@@ -18,8 +18,6 @@ module.exports = () => {
             return;
         }
 
-        console.log(authType, ':', authCredentials);
-
         // TODO infer userId from token
         // For now userId = token
         const userId = authCredentials;
