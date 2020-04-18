@@ -4,6 +4,8 @@ const express = require('express');
 const logger = require('morgan');
 const config = require('config');
 
+const models = require('./models');
+
 const corsConfig = config.get('corsConfig');
 assert.ok('origin' in corsConfig);
 
@@ -34,6 +36,8 @@ app.use(function(req, res, next) {
 app.use(/^\/(?!auth).*$/, auth());     // use for any path except /auth
 
 app.use('/messages', messagesRouter);
+
+models.sequelize.sync({force: false});
 
 module.exports = app;
 
