@@ -15,15 +15,7 @@ const redis = new Redis(redisConfig);
 /*
     POST a message
 
-Request model (urlencoded):
-    text: str
-    recipient_id: str(uuid)
-
-
-Response model:
-{
-    response: message_id
-}
+    https://docs.kzm.chuvash.pw/#/default/post_messages
 */
 
 router.post('/', function(req, res, next) {
