@@ -2,6 +2,8 @@ const express = require('express');
 const Redis = require('ioredis');
 const config = require('config');
 
+import { ValidationError } from "sequelize";
+
 const redisConfig = config.get('redisConfig');
 
 const { SuccessResponse } = require('../responses/success');
@@ -61,12 +63,21 @@ router.post('/', async (req, res) => {
         return;
     }
 
-    // TODO check data
-    await models.Message.create({
-        recipient_id: recipientId,
-        sender_id: senderId,
-        text: text
-    });
+    try {
+        await models.Message.create({
+            recipient_id: recipientId,
+            sender_id: senderId,
+            text: text
+        });
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            const err_message = e.errors[0].message;    // Just pick the first for now, TODO send the whole list
+            res.status(400).send(new ErrorResponse(400, err_message));
+            return;
+        } else {
+            throw e;
+        }
+    }
 
     const message = {
         sender_id: senderId,
