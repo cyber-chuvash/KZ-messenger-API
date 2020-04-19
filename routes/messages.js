@@ -2,7 +2,7 @@ const express = require('express');
 const Redis = require('ioredis');
 const config = require('config');
 
-import { ValidationError } from "sequelize";
+const { ValidationError, Op } = require("sequelize");
 
 const redisConfig = config.get('redisConfig');
 
@@ -40,14 +40,23 @@ router.get('/', async (req, res) => {
 
     const messages = await models.Message.findAll({
         where: {
-            recipient_id: userId
+            [Op.or]: [
+                { recipientId: userId },
+                { senderId: userId }
+            ]
         },
         limit: limit,
         offset: offset,
     });
 
-    // TODO only send the needed fields
-    res.send(new SuccessResponse(messages));
+    const response = messages.map( (message) => {
+        return {
+            recipient_id: message.recipientId,
+            text: message.text,
+            sender_id: message.senderId,
+        }
+    } );
+    res.send(new SuccessResponse(response));
 });
 
 /*
@@ -64,11 +73,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        await models.Message.create({
-            recipient_id: recipientId,
-            sender_id: senderId,
-            text: text
-        });
+        await models.Message.create({ recipientId, senderId, text });
     } catch (e) {
         if (e instanceof ValidationError) {
             const err_message = e.errors[0].message;    // Just pick the first for now, TODO send the whole list
