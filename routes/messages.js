@@ -86,6 +86,7 @@ router.post('/', async (req, res) => {
 
     const message = {
         sender_id: senderId,
+        recipient_id: recipientId,
         text: text
     };
 
