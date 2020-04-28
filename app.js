@@ -10,6 +10,8 @@ const corsConfig = config.get('corsConfig');
 assert.ok('origin' in corsConfig);
 
 const messagesRouter = require('./routes/messages');
+const usersRouter = require('./routes/users');
+const accountRouter = require('./routes/account');
 const auth = require('./middleware/auth');
 
 const app = express();
@@ -33,9 +35,11 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(/^\/(?!auth).*$/, auth());     // use for any path except /auth
+app.use(/^\/(?!account).*$/, auth());     // use for any path except /account
 
 app.use('/messages', messagesRouter);
+app.use('/users', usersRouter);
+app.use('/account', accountRouter);
 
 models.sequelize.sync({force: false});
 
