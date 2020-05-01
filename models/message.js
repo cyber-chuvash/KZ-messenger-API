@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
 
   const Message = sequelize.define('Message', {
-    recipientId: DataTypes.STRING,   // TODO use int
-    senderId: DataTypes.STRING,
+    recipientId: DataTypes.INTEGER,
+    senderId: DataTypes.INTEGER,
     text: {
       type: DataTypes.STRING,
       allowNull: false,
